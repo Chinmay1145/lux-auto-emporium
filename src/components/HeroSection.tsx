@@ -1,198 +1,160 @@
 
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { ChevronRight, Star, Sparkles, Zap } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { ChevronDown, Sparkles, Zap, Crown, Star, ArrowRight, Play } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const heroImages = [
-  'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=1200&h=600&fit=crop',
-  'https://images.unsplash.com/photo-1563720223185-11003d516935?w=1200&h=600&fit=crop',
-  'https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?w=1200&h=600&fit=crop'
-];
-
-const heroTexts = [
-  {
-    title: 'Experience Ultimate Performance',
-    subtitle: 'Discover the world\'s most exclusive supercars',
-    brand: 'Ferrari SF90 Stradale'
-  },
-  {
-    title: 'Precision Engineering',
-    subtitle: 'Where technology meets artistry',
-    brand: 'McLaren 720S'
-  },
-  {
-    title: 'Luxury Redefined',
-    subtitle: 'Beyond imagination, beyond limits',
-    brand: 'Bugatti Chiron'
-  }
+  "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&q=80&w=2070",
+  "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&q=80&w=2052",
+  "https://images.unsplash.com/photo-1553440569-bcc63803a83d?auto=format&fit=crop&q=80&w=2026"
 ];
 
 export function HeroSection() {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % heroImages.length);
+      setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
     }, 5000);
-
+    
+    setIsLoaded(true);
     return () => clearInterval(timer);
   }, []);
 
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
-
   return (
-    <section className="relative h-screen overflow-hidden">
-      {/* Animated background particles */}
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-background via-background to-muted/20">
+      {/* Dynamic background with rotating images */}
+      <div className="absolute inset-0">
+        {heroImages.map((image, index) => (
+          <div
+            key={index}
+            className={`absolute inset-0 transition-opacity duration-2000 ${
+              index === currentImageIndex ? 'opacity-20' : 'opacity-0'
+            }`}
+          >
+            <img
+              src={image}
+              alt={`Supercar ${index + 1}`}
+              className="w-full h-full object-cover scale-110 animate-slow-zoom"
+            />
+          </div>
+        ))}
+        <div className="absolute inset-0 bg-gradient-to-br from-background/90 via-background/70 to-background/90" />
+      </div>
+
+      {/* Animated particles */}
       <div className="absolute inset-0 pointer-events-none">
-        {[...Array(50)].map((_, i) => (
+        {[...Array(20)].map((_, i) => (
           <div
             key={i}
-            className="absolute w-1 h-1 bg-luxury-gold/30 rounded-full animate-pulse"
+            className="absolute w-1 h-1 bg-luxury-gold/40 rounded-full animate-float"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 3}s`,
-              animationDuration: `${2 + Math.random() * 3}s`,
+              animationDelay: `${Math.random() * 8}s`,
+              animationDuration: `${6 + Math.random() * 4}s`,
             }}
           />
         ))}
       </div>
 
-      {/* Background Images with parallax effect */}
-      <div className="absolute inset-0">
-        {heroImages.map((image, index) => (
-          <div
-            key={index}
-            className={`absolute inset-0 transition-all duration-1000 ${
-              index === currentSlide ? 'opacity-100 scale-105' : 'opacity-0 scale-100'
-            }`}
-            style={{
-              transform: `translateX(${(mousePosition.x - window.innerWidth / 2) * 0.01}px) translateY(${(mousePosition.y - window.innerHeight / 2) * 0.01}px)`,
-            }}
-          >
-            <img
-              src={image}
-              alt={`Supercar ${index + 1}`}
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-          </div>
-        ))}
+      {/* Geometric decorations */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-20 left-20 w-32 h-32 border border-luxury-gold/20 rounded-full animate-rotate-slow" />
+        <div className="absolute bottom-20 right-20 w-24 h-24 border border-luxury-gold/30 rotate-45 animate-pulse" />
+        <div className="absolute top-1/2 left-10 w-16 h-16 bg-luxury-gold/10 rounded-lg rotate-12 animate-float" />
+        <div className="absolute top-40 right-40 w-20 h-20 border-2 border-luxury-gold/20 rounded-full animate-bounce-slow" />
       </div>
 
-      {/* Floating elements */}
-      <div className="absolute top-1/4 right-1/4 animate-float">
-        <div className="w-20 h-20 bg-luxury-gold/10 backdrop-blur-sm border border-luxury-gold/30 rounded-full flex items-center justify-center">
-          <Sparkles className="w-8 h-8 text-luxury-gold animate-spin" style={{ animationDuration: '4s' }} />
+      {/* Main content */}
+      <div className="relative z-10 text-center px-4 max-w-6xl mx-auto">
+        {/* Premium badge */}
+        <div className={`inline-flex items-center gap-3 bg-luxury-gold/15 backdrop-blur-sm border border-luxury-gold/30 rounded-full px-6 py-3 mb-8 transition-all duration-1000 ${isLoaded ? 'animate-fade-in opacity-100' : 'opacity-0'}`}>
+          <Crown className="w-5 h-5 text-luxury-gold animate-pulse" />
+          <span className="text-sm font-semibold luxury-text-gradient">India's Premier Supercar Destination</span>
+          <Sparkles className="w-4 h-4 text-luxury-gold animate-spin" style={{ animationDuration: '3s' }} />
         </div>
-      </div>
 
-      <div className="absolute bottom-1/3 right-1/3 animate-float" style={{ animationDelay: '2s' }}>
-        <div className="w-16 h-16 bg-luxury-gold/10 backdrop-blur-sm border border-luxury-gold/30 rounded-full flex items-center justify-center">
-          <Zap className="w-6 h-6 text-luxury-gold animate-pulse" />
-        </div>
-      </div>
+        {/* Main heading with staggered animation */}
+        <h1 className={`text-5xl md:text-7xl lg:text-8xl font-bold mb-8 leading-tight transition-all duration-1000 delay-200 ${isLoaded ? 'animate-fade-in opacity-100' : 'opacity-0'}`}>
+          <span className="block mb-2">Luxury</span>
+          <span className="luxury-text-gradient relative">
+            Supercars
+            <div className="absolute -top-4 -right-4 w-8 h-8 bg-luxury-gold/20 rounded-full animate-ping" />
+            <div className="absolute top-0 right-0 w-4 h-4 bg-luxury-gold rounded-full animate-pulse" />
+          </span>
+          <span className="block mt-2 text-muted-foreground">Redefined</span>
+        </h1>
 
-      {/* Content */}
-      <div className="relative z-10 container mx-auto px-4 h-full flex items-center">
-        <div className="max-w-3xl text-white">
-          {/* Animated badge */}
-          <div className="inline-flex items-center gap-2 bg-luxury-gold/20 backdrop-blur-sm border border-luxury-gold/40 rounded-full px-6 py-3 mb-8 animate-slide-in-left">
-            <Star className="w-5 h-5 text-luxury-gold animate-spin" style={{ animationDuration: '3s' }} />
-            <span className="text-sm font-medium bg-luxury-gradient bg-clip-text text-transparent">Premium Collection 2024</span>
-          </div>
+        {/* Enhanced subtitle */}
+        <p className={`text-xl md:text-2xl text-muted-foreground mb-12 max-w-4xl mx-auto leading-relaxed transition-all duration-1000 delay-400 ${isLoaded ? 'animate-fade-in opacity-100' : 'opacity-0'}`}>
+          Experience the pinnacle of automotive excellence with our curated collection of 
+          <span className="luxury-text-gradient font-semibold"> world-class supercars</span>, 
+          where dreams meet reality and performance knows no bounds.
+        </p>
 
-          {/* Main heading with enhanced animations */}
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 leading-tight">
-            <span className="block animate-fade-in">{heroTexts[currentSlide].title}</span>
-            <span className="block luxury-text-gradient mt-4 animate-slide-in-left" style={{ animationDelay: '0.3s' }}>
-              {heroTexts[currentSlide].brand}
-            </span>
-          </h1>
-
-          {/* Subtitle with typewriter effect */}
-          <p className="text-xl md:text-3xl mb-12 text-gray-200 leading-relaxed animate-fade-in" style={{ animationDelay: '0.6s' }}>
-            {heroTexts[currentSlide].subtitle}
-          </p>
-
-          {/* Enhanced CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-6 animate-slide-in-left" style={{ animationDelay: '0.9s' }}>
-            <Link to="/gallery">
-              <Button 
-                size="lg" 
-                className="group bg-luxury-gold hover:bg-luxury-gold-dark text-black font-bold text-xl px-12 py-8 rounded-full transition-all duration-500 hover:scale-110 hover:shadow-2xl hover:shadow-luxury-gold/30 animate-luxury-glow"
-              >
-                <span className="mr-3">Explore Collection</span>
-                <ChevronRight className="w-6 h-6 group-hover:translate-x-2 transition-transform duration-300" />
-              </Button>
-            </Link>
-            <Link to="/gallery">
-              <Button 
-                variant="outline" 
-                size="lg"
-                className="group border-3 border-white/40 text-white hover:bg-white/20 backdrop-blur-sm font-bold text-xl px-12 py-8 rounded-full transition-all duration-500 hover:scale-110 hover:border-luxury-gold hover:text-luxury-gold"
-              >
-                <span>View Brands</span>
-              </Button>
-            </Link>
-          </div>
-
-          {/* Enhanced Stats */}
-          <div className="grid grid-cols-3 gap-12 mt-20 pt-12 border-t border-white/30">
-            {[
-              { value: '70+', label: 'Supercars', delay: '1.2s' },
-              { value: '7', label: 'Premium Brands', delay: '1.4s' },
-              { value: '24/7', label: 'Support', delay: '1.6s' }
-            ].map((stat, index) => (
-              <div key={stat.label} className="text-center animate-fade-in" style={{ animationDelay: stat.delay }}>
-                <div className="text-4xl md:text-5xl font-bold luxury-text-gradient mb-3 animate-pulse">
-                  {stat.value}
-                </div>
-                <div className="text-sm md:text-base text-gray-300 uppercase tracking-wider">
-                  {stat.label}
-                </div>
+        {/* Enhanced stats */}
+        <div className={`grid grid-cols-2 md:grid-cols-4 gap-6 mb-12 transition-all duration-1000 delay-500 ${isLoaded ? 'animate-fade-in opacity-100' : 'opacity-0'}`}>
+          {[
+            { icon: Crown, label: "Premium Brands", value: "7+" },
+            { icon: Zap, label: "Supercars", value: "70+" },
+            { icon: Star, label: "Happy Clients", value: "2000+" },
+            { icon: Sparkles, label: "Years Experience", value: "15+" }
+          ].map((stat, index) => (
+            <div key={index} className="text-center group">
+              <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-luxury-gold/10 backdrop-blur-sm border border-luxury-gold/30 flex items-center justify-center group-hover:bg-luxury-gold/20 group-hover:scale-110 transition-all duration-300">
+                <stat.icon className="w-8 h-8 text-luxury-gold group-hover:animate-pulse" />
               </div>
-            ))}
+              <div className="text-2xl font-bold luxury-text-gradient">{stat.value}</div>
+              <div className="text-sm text-muted-foreground">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Enhanced action buttons */}
+        <div className={`flex flex-col sm:flex-row gap-6 justify-center items-center mb-12 transition-all duration-1000 delay-700 ${isLoaded ? 'animate-fade-in opacity-100' : 'opacity-0'}`}>
+          <Link to="/gallery">
+            <Button 
+              size="lg" 
+              className="bg-luxury-gold hover:bg-luxury-gold-dark text-black font-bold px-10 py-6 rounded-full text-lg shadow-2xl hover:shadow-luxury-gold/50 transition-all duration-300 hover:scale-105 group"
+            >
+              <span className="flex items-center">
+                Explore Collection
+                <ArrowRight className="ml-3 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+              </span>
+            </Button>
+          </Link>
+          
+          <Button 
+            variant="outline" 
+            size="lg"
+            className="border-2 border-luxury-gold/50 text-luxury-gold hover:bg-luxury-gold hover:text-black font-semibold px-10 py-6 rounded-full text-lg backdrop-blur-sm transition-all duration-300 hover:scale-105 group"
+          >
+            <Play className="mr-3 w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
+            Watch Video
+          </Button>
+        </div>
+
+        {/* Enhanced scroll indicator */}
+        <div className={`transition-all duration-1000 delay-1000 ${isLoaded ? 'animate-fade-in opacity-100' : 'opacity-0'}`}>
+          <div className="flex flex-col items-center text-muted-foreground group cursor-pointer">
+            <span className="text-sm font-medium mb-2 group-hover:text-luxury-gold transition-colors duration-300">Discover More</span>
+            <div className="w-6 h-10 border-2 border-luxury-gold/50 rounded-full flex justify-center group-hover:border-luxury-gold transition-colors duration-300">
+              <div className="w-1 h-3 bg-luxury-gold/70 rounded-full mt-2 animate-bounce" />
+            </div>
+            <ChevronDown className="w-5 h-5 mt-2 animate-bounce group-hover:text-luxury-gold transition-colors duration-300" />
           </div>
         </div>
       </div>
 
-      {/* Enhanced slide indicators */}
-      <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 flex space-x-4">
-        {heroImages.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentSlide(index)}
-            className={`relative w-4 h-4 rounded-full transition-all duration-500 group ${
-              index === currentSlide 
-                ? 'bg-luxury-gold shadow-lg shadow-luxury-gold/50 scale-125' 
-                : 'bg-white/40 hover:bg-white/70 hover:scale-110'
-            }`}
-          >
-            {index === currentSlide && (
-              <div className="absolute inset-0 rounded-full bg-luxury-gold animate-ping" />
-            )}
-          </button>
-        ))}
-      </div>
-
-      {/* Enhanced scroll indicator */}
-      <div className="absolute bottom-12 right-12 animate-bounce">
-        <div className="w-8 h-12 border-2 border-white/50 rounded-full flex justify-center relative overflow-hidden">
-          <div className="w-1 h-4 bg-luxury-gold rounded-full mt-3 animate-pulse shadow-lg shadow-luxury-gold/50" />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-luxury-gold/10 to-transparent animate-shimmer" />
-        </div>
-      </div>
+      {/* Enhanced floating elements */}
+      <div className="absolute top-20 left-20 w-3 h-3 bg-luxury-gold rounded-full animate-ping opacity-60" />
+      <div className="absolute bottom-40 right-20 w-2 h-2 bg-luxury-gold rounded-full animate-pulse opacity-80" />
+      <div className="absolute top-1/3 right-10 w-4 h-4 border border-luxury-gold rounded-full animate-spin opacity-40" style={{ animationDuration: '8s' }} />
+      <div className="absolute bottom-20 left-1/4 w-1 h-1 bg-luxury-gold rounded-full animate-ping opacity-50" style={{ animationDelay: '2s' }} />
     </section>
   );
 }

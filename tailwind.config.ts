@@ -171,6 +171,64 @@ export default {
 					'50%': {
 						boxShadow: '0 0 30px rgba(212, 175, 55, 0.8)'
 					}
+				},
+				'slow-zoom': {
+					'0%': {
+						transform: 'scale(1)'
+					},
+					'100%': {
+						transform: 'scale(1.1)'
+					}
+				},
+				'glitter': {
+					'0%, 100%': {
+						opacity: '0',
+						transform: 'scale(0.5)'
+					},
+					'50%': {
+						opacity: '1',
+						transform: 'scale(1)'
+					}
+				},
+				'wave': {
+					'0%': {
+						transform: 'rotate(0deg)'
+					},
+					'10%': {
+						transform: 'rotate(14deg)'
+					},
+					'20%': {
+						transform: 'rotate(-8deg)'
+					},
+					'30%': {
+						transform: 'rotate(14deg)'
+					},
+					'40%': {
+						transform: 'rotate(-4deg)'
+					},
+					'50%': {
+						transform: 'rotate(10deg)'
+					},
+					'60%': {
+						transform: 'rotate(0deg)'
+					},
+					'100%': {
+						transform: 'rotate(0deg)'
+					}
+				},
+				'magnetic': {
+					'0%, 100%': {
+						transform: 'translateX(0) translateY(0)'
+					},
+					'25%': {
+						transform: 'translateX(5px) translateY(-5px)'
+					},
+					'50%': {
+						transform: 'translateX(-5px) translateY(5px)'
+					},
+					'75%': {
+						transform: 'translateX(5px) translateY(5px)'
+					}
 				}
 			},
 			animation: {
@@ -184,12 +242,20 @@ export default {
 				'float': 'float 6s ease-in-out infinite',
 				'bounce-slow': 'bounce-slow 2s ease-in-out infinite',
 				'rotate-slow': 'rotate-slow 8s linear infinite',
-				'pulse-glow': 'pulse-glow 2s ease-in-out infinite'
+				'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
+				'slow-zoom': 'slow-zoom 20s ease-in-out infinite alternate',
+				'glitter': 'glitter 2s ease-in-out infinite',
+				'wave': 'wave 2s ease-in-out',
+				'magnetic': 'magnetic 4s ease-in-out infinite'
 			},
 			backgroundImage: {
 				'luxury-gradient': 'linear-gradient(135deg, #D4AF37 0%, #FFD700 50%, #B8941F 100%)',
 				'dark-luxury': 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%)',
-				'shimmer': 'linear-gradient(90deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%)'
+				'shimmer': 'linear-gradient(90deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%)',
+				'radial-luxury': 'radial-gradient(circle at center, rgba(212, 175, 55, 0.1) 0%, transparent 70%)'
+			},
+			transitionDuration: {
+				'2000': '2000ms'
 			}
 		}
 	},
