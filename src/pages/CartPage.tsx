@@ -24,16 +24,11 @@ const CartPage = () => {
   const handleCheckout = async () => {
     setIsProcessing(true);
     
-    // Simulate payment processing
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    // Simulate processing
+    await new Promise(resolve => setTimeout(resolve, 1000));
     
-    toast({
-      title: "Order Placed Successfully!",
-      description: "Thank you for your purchase. You will receive a confirmation email shortly.",
-    });
-    
-    clearCart();
-    navigate('/checkout-success');
+    // Navigate to checkout page instead of directly to success
+    navigate('/checkout');
     setIsProcessing(false);
   };
 

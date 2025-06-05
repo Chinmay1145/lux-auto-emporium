@@ -11,6 +11,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { useForm } from 'react-hook-form';
 import { CreditCard, Banknote, Smartphone, Building, Shield, Lock } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
+import { useNavigate } from 'react-router-dom';
 
 interface CheckoutFormData {
   email: string;
@@ -35,6 +36,7 @@ interface CheckoutFormData {
 
 const CheckoutForm = () => {
   const [isProcessing, setIsProcessing] = useState(false);
+  const navigate = useNavigate();
   const form = useForm<CheckoutFormData>({
     defaultValues: {
       paymentMethod: 'card',
@@ -55,7 +57,8 @@ const CheckoutForm = () => {
       description: "Your inquiry has been submitted and payment details verified. Our team will contact you within 24 hours.",
     });
     
-    form.reset();
+    // Navigate to success page after processing
+    navigate('/checkout-success');
     setIsProcessing(false);
   };
 
